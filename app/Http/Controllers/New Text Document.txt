@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Auth;
+use Session;
+use Image;
+use App\Category;
+use App\Product;
+use App\Listing
+
+
+class ProductsController extends Controller
+{
+
+public function Products($url=null)
+{
+    $countCategory=Category::where(['url'=>$url])->count();
+   /* if($countCategory==0)
+       {
+          abort(404); 
+       }
+    */
+    $categoryDetails=Category::where(['url'=>$url])->first();
+    
+    
+    $categories = Category::with('categories')->where(['parent_id'=>0])->get();
+  if($categoryDetails->parent_id==0)
+   {
+       $subCategories=Category::where(['parent_id'=>$categoryDetails->id])->get();
+       
+       $cat_ids="";
+       foreach($subCategories as $key=>$subcat)
+       {
+         if($key==1)
+             $cat_ids.=","; 
+              $cat_ids.=trim($subcat->id);       
+         
+       }
+      // echo $cat_ids;die;
+       //$productsAll=Product::whereIn('category_id',array($cat_ids))->get();
+       $productsAll=Product::where(['category_id'=>$categoryDetails->id])->get();
+        
+   }
+    
+    else{
+        $productsAll=Product::where(['category_id'=>$categoryDetails->id])->get();
+        
+        
+       }
+   
+     $productsAll=Product::where(['category_id'=>$categoryDetails->id])->get();
+    
+    return view('products.listing')->with(compact('categoryDetails','productsAll','categories'));
+}
+    
+    public function Product($id=null)
+    {
+        
+        $productDetails=Product::where('id',$id)->first();
+        $categories = Category::with('categories')->where(['parent_id'=>0])->get();
+        return view('products.detail')->with(compact('productDetails','categories'));
+    }
+}
