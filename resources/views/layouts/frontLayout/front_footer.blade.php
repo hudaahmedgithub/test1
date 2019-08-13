@@ -365,6 +365,4 @@ border-top: 2px solid #990033;
 		
 	</footer><!--/Footer-->
 	
-      <div style="background:#036;color:#fff;text-align:center;font-size:30px;margin-top:-1260;height:120px;" class="footer">
-<p>&copy;Copy all rights are served ceated 2018</p>
-</div>
+      
